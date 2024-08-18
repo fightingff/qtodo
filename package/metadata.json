@@ -6,7 +6,7 @@
             }
         ],
         "Name": "qtodo",
-        "Id": "qtodo",
+        "Id": "qinvvv.qtodo.widget",
         "Description": "simple to-do list",
         "Category": "Utilities",
         "Icon": "checkbox",
@@ -16,7 +16,7 @@
             "Plasma/Applet"
         ],
         "Version": "1",
-        "Website": ""
+        "Website": "https://github.com/qinvvv/qtodo"
     },
     "X-Plasma-API-Minimum-Version": "6.0",
     "X-Plasma-MainScript": "ui/main.qml"
