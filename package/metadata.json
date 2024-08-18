@@ -8,7 +8,7 @@
         "Name": "qtodo",
         "Id": "qtodo",
         "Description": "simple to-do list",
-        "Category": "applet",
+        "Category": "Utilities",
         "Icon": "checkbox",
         "EnabledByDefault": true,
         "License": "GPL-3.0+",
