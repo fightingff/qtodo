@@ -51,6 +51,7 @@ ListView {
             onDropped: {
                 itemWrapper.dragItemIndex = index 
                 thisModel.move(drag.source.dragItemIndex, itemWrapper.dragItemIndex, 1)
+                
                 if (details == true) {
                     var sublist = todoListModel.get(detailIndex).sublist;                                                 
                     sublist.clear();                                                                                      
@@ -58,7 +59,6 @@ ListView {
                         sublist.append(thisModel.get(i))                                                               
                     }  
                 }  
-                saveModelToJson("todoListModel", todoListModel) 
                 itemDropped = true
             }
         }
@@ -74,49 +74,6 @@ ListView {
             height: parent.height * 0.9  
             anchors.margins: 20
             Button {                                                                 
-                id: detailButton                                                   
-                text: "details"                                                     
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: dropdownButton.left
-                visible: !details                                            
-                onClicked: {
-                    dropdownMenu.close()
-                    mainViewWrapper.visible = false
-                    detailsWrapper.visible = true
-                    detailsWrapper.detailTitle = todoListModel.get(index).text
-                    detailInputItem.detailIndex = index
-                    detailTodoList.detailIndex = index
-                    detailModel.clear()
-                    var sublist = todoListModel.get(index).sublist
-                    for (var i = sublist.count - 1; i >= 0; i--) {                                                                                                                                                                                                                                               
-                        detailModel.insert(0, sublist.get(i))
-                    }  
-                }  
-                background: Kirigami.Icon {
-                    id: detailIcon
-                    source: "application-menu-symbolic"
-                    width: Kirigami.Units.iconSizes.small
-                    height: width 
-                    opacity: 0.7
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    HoverHandler {
-                        id: detailButtonHoverHandler
-                        acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-                        cursorShape: Qt.PointingHandCursor
-                    }                                                                                
-                    states: [                                                                                     
-                        State {                                                                                                                                                   
-                            when: detailButtonHoverHandler.hovered                                                                  
-                            PropertyChanges {                                                                     
-                                target: detailIcon                                                                 
-                                opacity: 0.4                                                                 
-                            }                                                                                     
-                        }                                                                                      
-                    ] 
-                }                                                                                                    
-            }
-            Button {                                                                 
                 id: dropdownButton                                                   
                 text: "Dropdown"                                                     
                 anchors.verticalCenter: parent.verticalCenter
@@ -124,7 +81,7 @@ ListView {
                 onClicked: dropdownMenu.popup()    
                 background: Kirigami.Icon {
                     id: menuIcon
-                    source: "usermenu-down-symbolic"
+                    source: "usermenu-down"
                     width: Kirigami.Units.iconSizes.small
                     height: width 
                     anchors.verticalCenter: parent.verticalCenter
@@ -149,6 +106,27 @@ ListView {
             Menu {
                 id: dropdownMenu
                 width: 100
+                MenuItem {
+                    visible: !todoList.details
+                    contentItem: Button {
+                        id: detailButton
+                        text: "details"
+                        onClicked: {
+                            dropdownMenu.close()
+                            mainViewWrapper.visible = false
+                            detailsWrapper.visible = true
+                            detailsWrapper.detailTitle = todoListModel.get(index).text
+                            detailInputItem.detailIndex = index
+                            detailTodoList.detailIndex = index
+                            detailModel.clear()
+                            var sublist = todoListModel.get(index).sublist
+                            for (var i = sublist.count - 1; i >= 0; i--) {                                                                                                                                                                                                                                               
+                                detailModel.insert(0, sublist.get(i))
+                            }  
+                        }
+                    }
+                }
+
                 MenuItem { 
                     contentItem: Button {
                         id: delbutton
