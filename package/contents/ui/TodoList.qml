@@ -10,8 +10,8 @@ ListView {
     anchors.top: inputItem.bottom
     
     property var thisModel
-    property bool details: false
-    property int detailIndex: -1
+    property var parentModelList: []
+    property var parentModelTitleList: []
 
     property bool itemDropped: false  
     
@@ -51,13 +51,6 @@ ListView {
             onDropped: {
                 itemWrapper.dragItemIndex = index 
                 thisModel.move(drag.source.dragItemIndex, itemWrapper.dragItemIndex, 1)
-                if (details == true) {
-                    var sublist = todoListModel.get(detailIndex).sublist;                                                 
-                    sublist.clear();                                                                                      
-                    for (var i = 0; i < thisModel.count; i++) {                                                           
-                        sublist.append(thisModel.get(i))                                                               
-                    }  
-                }  
                 saveModelToJson("todoListModel", todoListModel) 
                 itemDropped = true
             }
@@ -72,25 +65,20 @@ ListView {
         Item {                                                                                                                           
             anchors.fill: parent
             height: parent.height * 0.9  
-            anchors.margins: 20
+            anchors.margins: 10
             Button {                                                                 
                 id: detailButton                                                   
                 text: "details"                                                     
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.right: dropdownButton.left
-                visible: !details                                            
+                anchors.right: dropdownButton.left 
+                width: 10
+                anchors.leftMargin: 10 
+                anchors.rightMargin: 10                                            
                 onClicked: {
-                    dropdownMenu.close()
-                    mainViewWrapper.visible = false
-                    detailsWrapper.visible = true
-                    detailsWrapper.detailTitle = todoListModel.get(index).text
-                    detailInputItem.detailIndex = index
-                    detailTodoList.detailIndex = index
-                    detailModel.clear()
-                    var sublist = todoListModel.get(index).sublist
-                    for (var i = sublist.count - 1; i >= 0; i--) {                                                                                                                                                                                                                                               
-                        detailModel.insert(0, sublist.get(i))
-                    }  
+                    root.subModelTitle = model.text
+                    todoList.parentModelList.push(root.currentModel)
+                    todoList.parentModelTitleList.push(model.text)
+                    root.currentModel = thisModel.get(index).sublist
                 }  
                 background: Kirigami.Icon {
                     id: detailIcon
@@ -120,7 +108,9 @@ ListView {
                 id: dropdownButton                                                   
                 text: "Dropdown"                                                     
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right                                            
+                anchors.right: parent.right  
+                width: 10
+                anchors.leftMargin: 10                             
                 onClicked: dropdownMenu.popup()    
                 background: Kirigami.Icon {
                     id: menuIcon
@@ -155,15 +145,8 @@ ListView {
                         text: "remove"
                         onClicked: { 
                             dropdownMenu.close()
-                            if (details == true) {
-                                var sublist = todoListModel.get(detailIndex).sublist                                                                                        
-                                sublist.remove(index)                                                          
-                                thisModel.remove(index) 
-                                saveModelToJson("todoListModel", todoListModel) 
-                            } 
-                            else { 
-                                thisModel.remove(index) 
-                            }
+                            thisModel.remove(index) 
+                            saveModelToJson("todoListModel", todoListModel)
                         }
                     }   
                 }                                                                                                                        

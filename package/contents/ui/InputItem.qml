@@ -33,25 +33,9 @@ Item {
             input.text = inputTextArea.text
             input.color = "white"
             input.checked = false
-            if (details == false) { 
-                for (var i = 0; i < thisModel.count; i++) {     
-                    for (var prop in thisModel.get(i)) {                                                         
-                        console.log(prop, ":", thisModel.get(i)[prop])                                                                         
-                    } 
-                }
-                input.sublist = []
-                thisModel.insert(0, input)  
-            }   
-            else { 
-                thisModel.insert(0, input) 
-                var sublist = todoListModel.get(detailIndex).sublist;                                                 
-                sublist.clear();                                                                                      
-                for (var i = 0; i < thisModel.count; i++) {                                                           
-                    sublist.append(thisModel.get(i))                                                               
-                }    
-                saveModelToJson("todoListModel", todoListModel)
-            }
-
+            input.sublist = []
+            thisModel.insert(0, input)  
+            saveModelToJson("todoListModel", todoListModel)
             inputTextArea.text = ""                                                                                                                                                                           
         }                                                                                                                                                                                                                                                                                                               
     } 
