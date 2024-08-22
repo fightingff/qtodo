@@ -148,7 +148,7 @@ ListView {
                 width: 100
                 MenuItem { 
                     contentItem: Button {
-                        id: delbutton
+                        id: deleteButton
                         text: "remove"
                         onClicked: { 
                             dropdownMenu.close()
@@ -156,7 +156,51 @@ ListView {
                             saveModelToJson("todoListModel", todoListModel)
                         }
                     }   
-                }                                                                                                                        
+                }    
+                MenuItem {                                                                                                                   
+                    contentItem: Button {
+                        id: editButton
+                        text: "edit"
+                        onClicked: { 
+                            dropdownMenu.close()
+                            editPopup.open() 
+                        }
+                    }  
+                }
+            }
+            Popup {                                                                  
+                id: editPopup                                                       
+                modal: true                                                          
+                focus: true                                                          
+                closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside         
+                                                                                                          
+                width: root.width                                                                                       
+                height: editTextArea.contentHeight + 35 
+
+                TextArea {                                                                                                                      
+                    id: editTextArea                                                                                                               
+                    anchors.fill: parent                                                                                                        
+                    font.pixelSize: 18                                                                                                   
+                    color: "white" 
+                    horizontalAlignment: TextArea.AlignHCenter                                                                                  
+                    verticalAlignment: TextArea.AlignVCenter                                                                                    
+                    wrapMode: TextArea.Wrap 
+                    text: model.text                                                                                                                                                                                                                                                                                                                   
+                    
+                    background: Rectangle {
+                        anchors.fill: parent   
+                        height: parent.height + 30                                           
+                        radius: 10                                                           
+                        opacity: 0.3                                                         
+                        color: "black"                                                        
+                    }                                                                                                                                                                                                                                                                                                                            
+
+                    Keys.onReturnPressed: {  
+                        model.text = editTextArea.text
+                        saveModelToJson("todoListModel", todoListModel)    
+                        editPopup.close()                                                                                                                                                          
+                    }                                                                                                                                                                                                                                                                                                               
+                }                                                                                                                         
             }
                                                                                                            
             Text {   
