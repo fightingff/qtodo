@@ -18,7 +18,7 @@ ListView {
     delegate: Item {
         id: itemWrapper
         width: parent.width * 0.9                                                                                                                                                                                                                                                                                                                     
-        height: todoText.contentHeight + 12                                                                                                           
+        height: todoText.contentHeight + 40                                                                                                     
         anchors.horizontalCenter: parent.horizontalCenter   
 
         property int dragItemIndex: index
@@ -66,75 +66,82 @@ ListView {
             anchors.fill: parent
             height: parent.height * 0.9  
             anchors.margins: 10
-            Button {                                                                 
-                id: detailButton                                                   
-                text: "details"                                                     
+            Column {
+                anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.right: dropdownButton.left 
-                width: 10
-                anchors.leftMargin: 10 
-                anchors.rightMargin: 10                                            
-                onClicked: {
-                    root.subModelTitle = model.text
-                    todoList.parentModelList.push(root.currentModel)
-                    todoList.parentModelTitleList.push(model.text)
-                    root.currentModel = thisModel.get(index).sublist
-                }  
-                background: Kirigami.Icon {
-                    id: detailIcon
-                    source: "application-menu-symbolic"
-                    width: Kirigami.Units.iconSizes.small
-                    height: width 
-                    opacity: 0.7
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    HoverHandler {
-                        id: detailButtonHoverHandler
-                        acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-                        cursorShape: Qt.PointingHandCursor
-                    }                                                                                
-                    states: [                                                                                     
-                        State {                                                                                                                                                   
-                            when: detailButtonHoverHandler.hovered                                                                  
-                            PropertyChanges {                                                                     
-                                target: detailIcon                                                                 
-                                opacity: 0.4                                                                 
-                            }                                                                                     
-                        }                                                                                      
-                    ] 
-                }                                                                                                    
-            }
-            Button {                                                                 
-                id: dropdownButton                                                   
-                text: "Dropdown"                                                     
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right  
-                width: 10
-                anchors.leftMargin: 10                             
-                onClicked: dropdownMenu.popup()    
-                background: Kirigami.Icon {
-                    id: menuIcon
-                    source: "usermenu-down-symbolic"
-                    width: Kirigami.Units.iconSizes.small
-                    height: width 
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    HoverHandler {
-                        id: dropdownButtonHoverHandler
-                        acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-                        cursorShape: Qt.PointingHandCursor
-                    }                                                                                
-                    states: [                                                                                     
-                        State {                                                                                                                                                   
-                            when: dropdownButtonHoverHandler.hovered                                                                  
-                            PropertyChanges {                                                                     
-                                target: menuIcon                                                                 
-                                opacity: 0.4                                                                 
-                            }                                                                                     
-                        }                                                                                      
-                    ] 
-                }                                                                                                    
-            }
+                Row {
+                    spacing: 10
+                    Button {                                                                 
+                        id: detailButton                                                   
+                        text: "details"                                                     
+                        width: 10                          
+                        onClicked: {
+                            root.subModelTitle = model.text
+                            todoList.parentModelList.push(root.currentModel)
+                            todoList.parentModelTitleList.push(model.text)
+                            root.currentModel = thisModel.get(index).sublist
+                        }  
+                        background: Kirigami.Icon {
+                            id: detailIcon
+                            source: "application-menu-symbolic"
+                            width: Kirigami.Units.iconSizes.small
+                            height: width
+                            opacity: 0.7
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            HoverHandler {
+                                id: detailButtonHoverHandler
+                                acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                                cursorShape: Qt.PointingHandCursor
+                            }                                                                                
+                            states: [                                                                                     
+                                State {                                                                                                                                                   
+                                    when: detailButtonHoverHandler.hovered                                                                  
+                                    PropertyChanges {                                                                     
+                                        target: detailIcon                                                                 
+                                        opacity: 0.4                                                                 
+                                    }                                                                                     
+                                }                                                                                      
+                            ] 
+                        }                                                                                                    
+                    }
+                    Button {                                                                 
+                        id: dropdownButton                                                   
+                        text: "Dropdown"                                                     
+                        width: 10                       
+                        onClicked: dropdownMenu.popup()    
+                        background: Kirigami.Icon {
+                            id: menuIcon
+                            source: "usermenu-down-symbolic"
+                            width: Kirigami.Units.iconSizes.small
+                            height: width 
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            HoverHandler {
+                                id: dropdownButtonHoverHandler
+                                acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                                cursorShape: Qt.PointingHandCursor
+                            }                                                                                
+                            states: [                                                                                     
+                                State {                                                                                                                                                   
+                                    when: dropdownButtonHoverHandler.hovered                                                                  
+                                    PropertyChanges {                                                                     
+                                        target: menuIcon                                                                 
+                                        opacity: 0.4                                                                 
+                                    }                                                                                     
+                                }                                                                                      
+                            ] 
+                        }                                                                                                    
+                    }
+                }
+                Text {
+                    id: remainingText
+                    text: getCheckedItemCount(thisModel.get(index).sublist)+"/"+thisModel.get(index).sublist.count
+                    visible: thisModel.get(index).sublist.count != 0
+                    color: "white" 
+                    anchors.right: parent.right
+                } 
+            }                                                                                                                  
 
             Menu {
                 id: dropdownMenu
@@ -151,20 +158,21 @@ ListView {
                     }   
                 }                                                                                                                        
             }
-
+                                                                                                           
             Text {   
                 id: todoText  
-                width: parent.width * 0.75                                                      
+                width: parent.width * 0.65                                                 
+                anchors.left: checkbox.right  
+                anchors.verticalCenter: parent.verticalCenter
                 text: model.text                                                                                                        
                 font.pixelSize: 16                                                                                                      
                 color: "white"                                                                           
-                anchors.verticalCenter: parent.verticalCenter  
-                anchors.horizontalCenter: parent.horizontalCenter                                                                                                              
                 wrapMode: Text.Wrap                                                                                                                                                                                               
-            }                                                                                                                           
+            }        
             CheckBox {  
                 id: checkbox 
-                anchors.verticalCenter: parent.verticalCenter                                                                                                               
+                anchors.verticalCenter: parent.verticalCenter    
+                anchors.left: parent.left                                                                                                           
                 checked: model.checked                                                                                                  
                 onCheckedChanged: {
                     model.checked = checked  
@@ -180,5 +188,15 @@ ListView {
             duration: 200                                                                                      
         }                                                                                                      
     }
+
+    function getCheckedItemCount(model) {                                        
+        var count = 0;                                                           
+        for (var i = 0; i < model.count; i++) {                                  
+            if (model.get(i).checked) {                                  
+                count++;                                                         
+            }                                                                    
+        }                                                                        
+        return count;                                                            
+    }  
                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 }

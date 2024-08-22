@@ -36,7 +36,7 @@ Item {
             input.sublist = []
             thisModel.insert(0, input)  
             saveModelToJson("todoListModel", todoListModel)
-            inputTextArea.text = ""                                                                                                                                                                           
+            inputTextArea.text = ""                                                                                                                                                                         
         }                                                                                                                                                                                                                                                                                                               
     } 
 } 
