@@ -21,11 +21,12 @@ PlasmoidItem {
     Item {
         id: mainViewWrapper
         anchors.fill: parent
+        clip: true
 
         TodoList {
             id: mainTodoList
             width: parent.width                                      
-            height: parent.height * 0.75 
+            height: parent.height
             anchors.top: mainInputItem.bottom                         
             model: currentModel 
             thisModel: currentModel
