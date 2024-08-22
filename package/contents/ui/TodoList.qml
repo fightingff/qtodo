@@ -205,7 +205,7 @@ ListView {
                                                                                                            
             Text {   
                 id: todoText  
-                width: parent.width * 0.65                                                 
+                width: parent.width * 0.75
                 anchors.left: checkbox.right  
                 anchors.verticalCenter: parent.verticalCenter
                 text: model.text                                                                                                        
