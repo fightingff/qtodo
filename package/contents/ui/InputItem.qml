@@ -7,8 +7,6 @@ Item {
     height: inputTextArea.contentHeight + 8                                                                                                                                                                                                                                                                                                                    
     anchors.horizontalCenter: parent.horizontalCenter 
 
-    property bool details: false  
-    property int detailIndex: -1
     property var thisModel
 
     TextArea {                                                                                                                      
