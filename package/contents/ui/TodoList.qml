@@ -73,6 +73,18 @@ ListView {
                 anchors.verticalCenter: parent.verticalCenter
                 Row {
                     spacing: 10
+
+                    Text {
+                        id: remainingText
+                        text: getCheckedItemCount(thisModel.get(index).sublist) + "/" + thisModel.get(index).sublist.count
+                        width: 30
+                        visible: thisModel.get(index).sublist.count != 0
+                        color: "yellow" 
+                        font.pixelSize: 16
+                        anchors.verticalCenter: parent.verticalCenter
+                        // anchors.horizontalCenter: parent.left
+                    }
+
                     Button {                                                                 
                         id: detailButton                                                   
                         text: "details"                                                     
@@ -91,7 +103,6 @@ ListView {
                             color: "blue"
                             opacity: 0.7
                             anchors.verticalCenter: parent.verticalCenter
-                            // anchors.horizontalCenter: parent.right
                             HoverHandler {
                                 id: detailButtonHoverHandler
                                 acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
@@ -111,6 +122,8 @@ ListView {
 
                     Button {
                         id: editButton
+                        text: "edit"
+                        width: 10
                         onClicked: { 
                             editPopup.open() 
                         }
@@ -123,7 +136,6 @@ ListView {
                             opacity: 0.7
                             
                             anchors.verticalCenter: parent.verticalCenter
-                            // anchors.right: detailButton.left - 10
                             HoverHandler {
                                 id: editButtonHoverHandler
                                 acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
@@ -143,6 +155,8 @@ ListView {
 
                     Button {
                         id: deleteButton
+                        text: "remove"
+                        width: 10
                         onClicked: { 
                             thisModel.remove(index) 
                             saveModelToJson("todoListModel", todoListModel)
@@ -155,7 +169,6 @@ ListView {
                             color: "red"
                             opacity: 0.7
                             anchors.verticalCenter: parent.verticalCenter
-                            anchors.right: parent.right
                             HoverHandler {
                                 id: deleteButtonHoverHandler
                                 acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
@@ -172,16 +185,6 @@ ListView {
                             ] 
                         }
                     }
-
-                    Text {
-                        id: remainingText
-                        text: getCheckedItemCount(thisModel.get(index).sublist)+"/"+thisModel.get(index).sublist.count
-                        visible: thisModel.get(index).sublist.count != 0
-                        color: "yellow" 
-                        font.pixelSize: 16
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.right: parent.right - 10
-                    } 
                 }
             }                                                                                                                  
 
