@@ -3,7 +3,7 @@ import QtQuick.Controls
 
 Item {    
     id: inputItem                                                                                                                                                                                                                               
-    width: root.width * 0.9                                                                                         
+    width: root.width * 0.8                                                                                         
     height: inputTextArea.contentHeight + 8                                                                                                                                                                                                                                                                                                                    
     anchors.horizontalCenter: parent.horizontalCenter 
 
@@ -22,8 +22,8 @@ Item {
             anchors.fill: parent   
             height: parent.height + 30                                           
             radius: 10                                                           
-            opacity: 0.3                                                         
-            color: "black"                                                        
+            opacity: 0.2                                                         
+            color: "blue"                                                        
         }                                                                                                                                                                                                                                                                                                                            
 
         Keys.onReturnPressed: {  

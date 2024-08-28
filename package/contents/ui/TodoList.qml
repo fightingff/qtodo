@@ -6,8 +6,10 @@ ListView {
     id: todoList                                                                                                 
     anchors.topMargin: 10  
     spacing: 10
-    clip: true 
-    anchors.top: inputItem.bottom
+    clip: true
+    anchors.top: inputItem.bottom + 10
+    // fix the scrolling issue
+    anchors.bottom: parent.bottom
     
     property var thisModel
     property var parentModelList: []
@@ -17,8 +19,8 @@ ListView {
     
     delegate: Item {
         id: itemWrapper
-        width: parent.width * 0.9                                                                                                                                                                                                                                                                                                                     
-        height: todoText.contentHeight + 40                                                                                                     
+        width: parent.width * 0.95                                                                                                                                                                                                                                                                                                                     
+        height: todoText.contentHeight + 20                                                                                                     
         anchors.horizontalCenter: parent.horizontalCenter   
 
         property int dragItemIndex: index
@@ -86,9 +88,10 @@ ListView {
                             source: "application-menu-symbolic"
                             width: Kirigami.Units.iconSizes.small
                             height: width
+                            color: "blue"
                             opacity: 0.7
                             anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
+                            // anchors.horizontalCenter: parent.right
                             HoverHandler {
                                 id: detailButtonHoverHandler
                                 acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
@@ -105,77 +108,93 @@ ListView {
                             ] 
                         }                                                                                                    
                     }
-                    Button {                                                                 
-                        id: dropdownButton                                                   
-                        text: "Dropdown"                                                     
-                        width: 10                       
-                        onClicked: dropdownMenu.popup()    
+
+                    Button {
+                        id: editButton
+                        onClicked: { 
+                            editPopup.open() 
+                        }
                         background: Kirigami.Icon {
-                            id: menuIcon
-                            source: "usermenu-down-symbolic"
+                            id: editIcon
+                            source: "document-edit-symbolic"
                             width: Kirigami.Units.iconSizes.small
-                            height: width 
+                            height: width
+                            color: "green"
+                            opacity: 0.7
+                            
                             anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
+                            // anchors.right: detailButton.left - 10
                             HoverHandler {
-                                id: dropdownButtonHoverHandler
+                                id: editButtonHoverHandler
                                 acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
                                 cursorShape: Qt.PointingHandCursor
                             }                                                                                
                             states: [                                                                                     
                                 State {                                                                                                                                                   
-                                    when: dropdownButtonHoverHandler.hovered                                                                  
+                                    when: editButtonHoverHandler.hovered                                                                  
                                     PropertyChanges {                                                                     
-                                        target: menuIcon                                                                 
+                                        target: editIcon                                                                 
                                         opacity: 0.4                                                                 
                                     }                                                                                     
                                 }                                                                                      
                             ] 
-                        }                                                                                                    
+                        }
                     }
-                }
-                Text {
-                    id: remainingText
-                    text: getCheckedItemCount(thisModel.get(index).sublist)+"/"+thisModel.get(index).sublist.count
-                    visible: thisModel.get(index).sublist.count != 0
-                    color: "white" 
-                    anchors.right: parent.right
-                } 
-            }                                                                                                                  
 
-            Menu {
-                id: dropdownMenu
-                width: 100
-                MenuItem { 
-                    contentItem: Button {
+                    Button {
                         id: deleteButton
-                        text: "remove"
                         onClicked: { 
-                            dropdownMenu.close()
                             thisModel.remove(index) 
                             saveModelToJson("todoListModel", todoListModel)
                         }
-                    }   
-                }    
-                MenuItem {                                                                                                                   
-                    contentItem: Button {
-                        id: editButton
-                        text: "edit"
-                        onClicked: { 
-                            dropdownMenu.close()
-                            editPopup.open() 
+                        background: Kirigami.Icon {
+                            id: deleteIcon
+                            source: "edit-delete-symbolic"
+                            width: Kirigami.Units.iconSizes.small
+                            height: width
+                            color: "red"
+                            opacity: 0.7
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.right: parent.right
+                            HoverHandler {
+                                id: deleteButtonHoverHandler
+                                acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                                cursorShape: Qt.PointingHandCursor
+                            }                                                                                
+                            states: [                                                                                     
+                                State {                                                                                                                                                   
+                                    when: deleteButtonHoverHandler.hovered                                                                  
+                                    PropertyChanges {                                                                     
+                                        target: deleteIcon                                                                 
+                                        opacity: 0.4                                                                 
+                                    }                                                                                     
+                                }                                                                                      
+                            ] 
                         }
-                    }  
+                    }
+
+                    Text {
+                        id: remainingText
+                        text: getCheckedItemCount(thisModel.get(index).sublist)+"/"+thisModel.get(index).sublist.count
+                        visible: thisModel.get(index).sublist.count != 0
+                        color: "yellow" 
+                        font.pixelSize: 16
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.right: parent.right - 10
+                    } 
                 }
-            }
+            }                                                                                                                  
+
+            // just use two buttons instead of a dropdown menu
+
             Popup {                                                                  
                 id: editPopup                                                       
                 modal: true                                                          
                 focus: true                                                          
-                closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside         
+                closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside | Popup.CloseOnEnter      
                                                                                                           
-                width: root.width                                                                                       
-                height: editTextArea.contentHeight + 35 
+                width: root.width + 10                                                                                    
+                height: editTextArea.contentHeight + 35
 
                 TextArea {                                                                                                                      
                     id: editTextArea                                                                                                               
@@ -188,15 +207,17 @@ ListView {
                     text: model.text                                                                                                                                                                                                                                                                                                                   
                     
                     background: Rectangle {
-                        anchors.fill: parent   
+                        anchors.fill: parent  
                         height: parent.height + 30                                           
                         radius: 10                                                           
                         opacity: 0.3                                                         
-                        color: "black"                                                        
+                        color: "green"                                                        
                     }                                                                                                                                                                                                                                                                                                                            
 
                     Keys.onReturnPressed: {  
                         model.text = editTextArea.text
+                        model.checked = false
+                        thisModel.move(index, 0, 1)
                         saveModelToJson("todoListModel", todoListModel)    
                         editPopup.close()                                                                                                                                                          
                     }                                                                                                                                                                                                                                                                                                               
@@ -217,11 +238,18 @@ ListView {
                 id: checkbox 
                 anchors.verticalCenter: parent.verticalCenter    
                 anchors.left: parent.left                                                                                                           
-                checked: model.checked                                                                                                  
-                onCheckedChanged: {
+                checked: model.checked  
+                // use onClicked instead of onCheckedChanged to avoid binding loop
+                onClicked: {                                                                                                                    
                     model.checked = checked  
+                    // move the checked item to the bottom of the list
+                    if (thisModel.get(index).checked) {
+                        thisModel.move(index, thisModel.count-1, 1)
+                    } else {
+                        thisModel.move(index, 0, 1)
+                    }
                     saveModelToJson("todoListModel", todoListModel) 
-                }
+                }                                                                                               
             } 
                                                                                                                                                                                                                                                             
         }                                                                                                                               

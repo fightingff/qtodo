@@ -2,12 +2,12 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "qinvvv"
+                "Name": "qinvvv & ff"
             }
         ],
-        "Name": "qtodo",
-        "Id": "qinvvv.qtodo.widget",
-        "Description": "simple to-do list",
+        "Name": "Q-Todo",
+        "Id": "ff.qtodo.widget",
+        "Description": "Customized TodoLists widget from Q-Todo",
         "Category": "Utilities",
         "Icon": "checkbox",
         "EnabledByDefault": true,
@@ -16,7 +16,7 @@
             "Plasma/Applet"
         ],
         "Version": "1",
-        "Website": "https://github.com/qinvvv/qtodo"
+        "Website": "https://github.com/ff/qtodo"
     },
     "X-Plasma-API-Minimum-Version": "6.0",
     "X-Plasma-MainScript": "ui/main.qml"

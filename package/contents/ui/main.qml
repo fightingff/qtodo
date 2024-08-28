@@ -3,20 +3,23 @@ import QtQuick.Layouts
 import org.kde.plasma.plasmoid                                         
 import QtQuick.Controls                                           
 import QtQuick.LocalStorage
-import org.kde.plasma.core
+import org.kde.plasma.core as PlasmaCore
 import org.kde.kirigami as Kirigami
 
 PlasmoidItem {     
     id: root                                                           
     width: 300                                                       
-    height: 400 
-    Layout.minimumWidth: 300                                                 
-    Layout.minimumHeight: 400     
+    height: 400
+    Layout.minimumWidth: 200                                                 
+    Layout.minimumHeight: 200
+    // transparent background
+    Plasmoid.backgroundHints: PlasmaCore.Types.NoBackground
 
     property var mainModel: todoListModel
     property var currentModel: mainModel
     property bool subModel: !(mainModel == currentModel)
     property var subModelTitle
+
 
     Item {
         id: mainViewWrapper
@@ -47,8 +50,8 @@ PlasmoidItem {
             height: subModel ? Math.max(title.contentHeight + 10, 40) : 0
             radius: 10
             anchors.top: parent.top
-            color: "black"
-            opacity: 0.3
+            color: "yellow"
+            opacity: 0.6 
         }
         Text {    
             id: title 
@@ -84,6 +87,7 @@ PlasmoidItem {
                 source: "draw-arrow-back"
                 width: Kirigami.Units.iconSizes.medium
                 height: width 
+                color: "blue"
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 HoverHandler {
@@ -115,6 +119,7 @@ PlasmoidItem {
 
     function saveModelToJson(fileName, listModel) {
         let jsonArray = []
+        // move the checked items to the end of the list
         for (let i = 0; i < listModel.count; i++) {
             jsonArray.push(listModel.get(i))
         }
@@ -142,6 +147,10 @@ PlasmoidItem {
             for (let i = 0; i < jsonArray.length; i++) {
                 listModel.append(jsonArray[i])
             }
+            // move the checked items to the end of the list
+            listModel.sort(function(a, b) {
+                return a.checked - b.checked
+            })
         }
     }                                                
 }       
